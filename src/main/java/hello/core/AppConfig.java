@@ -15,23 +15,36 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    //**IoC 컨테이너, DI 컨테이너, 어셈블러, 오브젝트 팩토리 등으로 불린다~**
-    //appConfig 객체는 memoryMemberRepository 객체를 생성하고,
-    //그 참조값을 memberServiceImpl을 생성하면서 생성자로 전달한다.
-    //클라이언트인 memberServiceImpl 입장에서는 의존 관계를 마치 외부에서 주입해주는 것과 같음!
+    //@Bean memberService -> new MemoryMemberRepository()
+    //@Bean orderService -> new MemoryMemberRepository()
+    //=> 2번 호출..? 싱글톤이 깨질까 안깨질까?!
+
+    //call AppConfig.memberService
+    //call AppConfig.memberRepository
+    //call AppConfig.memberService
+    //call AppConfig.orderService
+    //call AppConfig.memberRepository
+
+    //결과
+    //call AppConfig.memberService
+    //call AppConfig.memberRepository
+    //call AppConfig.orderService
     @Bean //-> 컨테이너라는 곳에 저장함.
     public MemberService memberService(){
+        System.out.println("call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
 
     //MemberRepository 역할
     @Bean
     public MemberRepository memberRepository() {
+        System.out.println("call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
     @Bean
     public OrderService orderService(){
+        System.out.println("call AppConfig.orderService");
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
