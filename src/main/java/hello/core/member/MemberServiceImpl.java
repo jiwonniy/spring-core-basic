@@ -1,5 +1,9 @@
 package hello.core.member;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class MemberServiceImpl implements MemberService{
 
     //final : 객체 변경을 강제할 수 있는 final 키워드의 장점을 가져가면서 의존관계 주입을 사용할 수 있기 때문에
@@ -11,6 +15,7 @@ public class MemberServiceImpl implements MemberService{
     //여기 어디에도 MemoryMemberRepository가 없음. **생성자 주입**
     private  final MemberRepository memberRepository;
 
+    @Autowired //ac.getBean(MemberRepository.class)
     public MemberServiceImpl(MemberRepository memberRepository){
         this.memberRepository = memberRepository;
     }
