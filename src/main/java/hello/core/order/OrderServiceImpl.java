@@ -28,6 +28,25 @@ public class OrderServiceImpl implements OrderService{
     private final DiscountPolicy discountPolicy;
     //=> NPE 발생하므로, 누군가가 DiscountPolicy의 구현 객체를 대신 생성하고 주입해줘야한다!
 
+    /* 수정자 주입
+    @Autowired
+    public void setMemberRepository(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    @Autowired
+    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+    }
+    */
+
+    /* 일반 메서드 주입
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy){
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+    */
     @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
