@@ -2,8 +2,10 @@ package hello.core.scope;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.inject.Provider;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -37,12 +39,12 @@ public class SingletonWithPrototypeTest1 {
 
         ClientBean clientBean2 = ac.getBean(ClientBean.class);
         int count2 = clientBean2.logic();
-        assertThat(count2).isEqualTo(2);
+        assertThat(count2).isEqualTo(1);
     }
 
     @Scope("singleton")
     static class ClientBean{
-        // 이 방법은 원한 방법이 아님!
+        /* 이 방법은 원한 방법이 아님!
         private final PrototypeBean prototypeBean; //생성시점에 주입
 
         @Autowired
@@ -56,9 +58,9 @@ public class SingletonWithPrototypeTest1 {
 
             return count;
         }
+        */
 
-
-        /* 이방법은 프로토타입 쓰고 버리는데, 클라이언트빈이 applicationContext가져와서 사용.. 복잡
+        /* 가장 간단한 방법은 싱글톤 빈이 프로토타입을 사용할 때 마다 스프링 컨테이너에 새로 요청하는 것!
         @Autowired
         ApplicationContext applicationContext;
 
@@ -70,7 +72,30 @@ public class SingletonWithPrototypeTest1 {
         }
          */
 
-        //해결방법은 다음시간에..
+        /*해결방법
+        @Autowired
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+
+        public int logic(){
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+            prototypeBean.addCount();
+            int count = prototypeBean.getCount();
+
+            return count;
+        }
+        */
+
+        //마지막 해결 방법
+        @Autowired
+        private Provider<PrototypeBean> prototypeBeanProvider;
+
+        public int logic(){
+            PrototypeBean prototypeBean = prototypeBeanProvider.get();
+            prototypeBean.addCount();
+            int count = prototypeBean.getCount();
+
+            return count;
+        }
 
     }
 
