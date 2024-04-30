@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PrototypeTest {
 
     @Test
-    void prototypeBeanFine(){
+    void prototypeBeanFind(){
         AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(PrototypeBean.class);
         System.out.println("find prototypeBean1");
         PrototypeBean prototypeBean1 = ac.getBean(PrototypeBean.class);
